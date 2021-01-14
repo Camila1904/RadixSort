@@ -35,4 +35,34 @@ public class Radix {
       merge (data, bucket);
     }
   }
+
+  public static void radixSort(SortableLinkedList data) {
+    SortableLinkedList[] pos = new SortableLinkedList[10];
+    for (int i=0;i<10;i++) {
+      pos[i] = new SortableLinkedList();
+    }
+    SortableLinkedList[] neg = new SortableLinkedList[10];
+    for (int i=0;i<10;i++) {
+      neg[i] = new SortableLinkedList();
+    }
+    int pass = 0;
+    for (int i=0; i<data.size();i++) {
+      pass = Math.max(length(data.get(i)),pass);
+    }
+    for (int i=0; i<pass;i++) {
+      while (data.size() != 0) {
+        int num = data.get(0);
+        int digit = nth(num, i);
+        if (num <0) {
+          neg[10-digit-1].add(num);
+        }
+        else {
+          pos[digit].add(num);
+        }
+        data.remove(0);
+      }
+      merge (data, neg);
+      merge (data, pos);
+    }
+  }
 }
