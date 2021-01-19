@@ -16,14 +16,24 @@ public class Radix {
   }
 
   public static void radixSortSimple(SortableLinkedList data) {
-    int pass = 0;
-    for (int i=0; i<data.size();i++) {
-      pass = Math.max(length(data.get(i)), pass);
-    }
+    int pass = 1;
+
     SortableLinkedList[] bucket = new SortableLinkedList[10];
     for (int i=0; i<10;i++) {
       bucket[i] = new SortableLinkedList();
       // make new lists for each of the 10 digits
+    }
+    for (int i=0; i<pass;i++) {
+      if (i==0) {
+        while (data.size()>0) {
+          if (length(data.get(0))>pass) {
+            pass = length(data.get(0));
+          }
+          bucket[0].add(data.get(0));
+          data.remove(0);
+        }
+        merge(data, bucket);
+      }
     }
     for (int i=0; i<pass;i++) {
       while (data.size() != 0) {
@@ -31,6 +41,7 @@ public class Radix {
         int digit = nth(num, i);
         bucket[digit].add(num);
         data.remove(0);
+        //remove until list is empty, removing from the front
       }
       merge (data, bucket);
     }
